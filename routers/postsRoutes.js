@@ -41,30 +41,9 @@ router.put("/:id", (req, res) => {
   res.json({ message: "Post updated" });
 });
 
-router.post("/login", (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(400).json({ message: "invalid credentials" });
-  }
-  const user = User.getUserByEmail(email);
-  if (!user) {
-    return res.status(404).json({ message: "invalid credentials" });
-  }
-  // if (!bcrypt.compareSync(password, user.password))
-  //   return res.status(400).json({ message: "invalid creds" });
-  const token = jwt.sign({ id: user.id, email: user.email }, "secret_key", {
-    expiresIn: "30s",
-  });
-  res.json({ token: token });
-});
+
 
 router.get("/my", (req, res) => {});
-
-function auth(req, res, next) {
-  const accessToken = req.headers.authorize;
-  if (!accessToken) return res.status(401).json({ message: "unathorized" });
-  const token = jwt.verify(accessToken, "secret_key");
-}
 
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
